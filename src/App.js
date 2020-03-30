@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import ControlPanel from './components/ControlPanel';
 import Transcript from './components/Transcript';
-import transcript from './assets/transcript.json';
 import Search from './components/Search';
 import styled from 'styled-components';
-function App({ hover }) {
+function App({ hover, transcript }) {
   console.log(transcript);
   return (
     <div>
@@ -15,7 +14,7 @@ function App({ hover }) {
       </audio> */}
       <ControlPanel />
       <SearchWrapper>
-        <Search placeholder="Search call transcript" />
+        <Search placeholder='Search call transcript' />
       </SearchWrapper>
       {transcript.word_timings.map((e, i) => (
         <Transcript primary={i % 2 == 0} key={i} timing={e} hover={hover}></Transcript>
@@ -28,6 +27,9 @@ const SearchWrapper = styled.div`
   margin: 18px 26px 10px 26px;
 `;
 
-const mapStateToProps = () => ({});
+function mapStateToProps(state) {
+  console.log(state);
+  return { transcript: state.transcript };
+}
 
 export default connect(mapStateToProps)(App);

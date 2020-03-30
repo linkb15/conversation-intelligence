@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import Button from './Button';
-import React from 'react';
+import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
 
 const Transcript = ({ timing, primary, hover }) => {
@@ -18,11 +18,9 @@ const Transcript = ({ timing, primary, hover }) => {
         <TranscriptText primary={primary}>
           {timing.map((e, i) => {
             return (
-              <>
-                <TranscriptWord key={i} primary={primary}>
-                  {e.word}
-                </TranscriptWord>{' '}
-              </>
+              <Fragment key={i}>
+                <TranscriptWord primary={primary}>{e.word}</TranscriptWord>{' '}
+              </Fragment>
             );
           })}
           <Share primary={primary}>Share</Share>
