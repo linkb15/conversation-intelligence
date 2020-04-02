@@ -37,11 +37,11 @@ const ShareButton = styled(Button)`
   margin-left: auto;
 `;
 
-export default () => {
+export default ({ fnPlayPause, paused }) => {
   return (
     <ControlPanel>
       <Rewind />
-      <PlayPause />
+      <PlayPause onClick={() => fnPlayPause()} paused={paused} />
       <Forward />
       <SpeedControl>1.0x</SpeedControl>
       <ShareButton>

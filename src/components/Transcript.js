@@ -1,25 +1,39 @@
 import styled, { css } from 'styled-components';
 import Button from './Button';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import dayjs from 'dayjs';
+var isBetween = require('dayjs/plugin/isBetween');
+dayjs.extend(isBetween);
 
-const Transcript = ({ timing, primary, hover }) => {
-  const startTime = parseFloat(timing[0].startTime.slice(0, -1));
-  console.log(startTime);
+const Transcript = ({ timing, primary, currentTime = -1, setCurrentTime }) => {
+  console.log(currentTime);
+  const readTime = time => parseFloat(time.slice(0, -1));
+  const startTime = timing[0].startTime;
+  const endTime = timing[timing.length - 1].endTime;
+
+  const checkTime = (start, end) => {
+    const isWithin = currentTime >= readTime(start) && currentTime <= readTime(end);
+    return isWithin;
+  };
+  const hover = checkTime(startTime, endTime);
   return (
     <Wrapper primary={primary} hover={hover}>
       <TranscriptWrapper primary={primary}>
         <TranscriptStartTime primary={primary}>
           {dayjs()
+            .hour(0)
             .minute(0)
-            .second(startTime)
+            .second(readTime(startTime))
             .format('mm:ss')}
         </TranscriptStartTime>
         <TranscriptText primary={primary}>
           {timing.map((e, i) => {
+            const wordHover = checkTime(e.startTime, e.endTime);
             return (
               <Fragment key={i}>
-                <TranscriptWord primary={primary}>{e.word}</TranscriptWord>{' '}
+                <TranscriptWord primary={primary} wordHover={wordHover} onClick={() => setCurrentTime(readTime(e.startTime) + 0.01)}>
+                  {e.word}
+                </TranscriptWord>{' '}
               </Fragment>
             );
           })}
@@ -70,7 +84,7 @@ const Wrapper = styled.div`
   :hover {
     ${hoverCss}
   }
-  ${({ hover }) => (hover ? hoverCss : '')}
+  ${({ hover }) => (hover ? hoverCss : null)}
 `;
 
 const TranscriptWrapper = styled.div`
@@ -87,10 +101,15 @@ const TranscriptStartTime = styled.h5`
   margin-right: 9px;
 `;
 
+const wordHoverCss = css`
+  background: ${p => (p.primary ? 'rgba(26, 153, 246, 0.25)' : 'rgba(136, 104, 233, 0.25)')};
+  border-radius: 2px;
+`;
+
 const TranscriptWord = styled.span`
   cursor: pointer;
   :hover {
-    background: ${p => (p.primary ? 'rgba(26, 153, 246, 0.25)' : 'rgba(136, 104, 233, 0.25)')};
-    border-radius: 2px;
+    ${wordHoverCss}
   }
+  ${({ wordHover }) => (wordHover ? wordHoverCss : null)}
 `;
