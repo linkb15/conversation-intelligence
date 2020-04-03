@@ -12,12 +12,14 @@ export function updatePlaybackRate(audio, value) {
     payload: float
   };
 }
+
 export function stop() {
   return {
     type: PLAY,
     payload: true
   };
 }
+
 export function play(audio) {
   if (audio.current.paused) audio.current.play();
   else audio.current.pause();
@@ -27,12 +29,14 @@ export function play(audio) {
     payload: audio.current.paused
   };
 }
+
 export function setCurrentTime(currentTime) {
   return {
     type: SET_CURRENT_TIME,
     payload: currentTime
   };
 }
+
 export function seek(audio, currentTime) {
   audio.current.currentTime = currentTime;
   return {

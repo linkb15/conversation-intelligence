@@ -39,7 +39,6 @@ const GlobalStyles = createGlobalStyle`
 
 const store = configureStore();
 const theme = store.getState().theme;
-console.log(theme);
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>

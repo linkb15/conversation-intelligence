@@ -2,11 +2,8 @@ import styled, { css } from 'styled-components';
 import Button from './Button';
 import React, { Fragment, useState } from 'react';
 import dayjs from 'dayjs';
-var isBetween = require('dayjs/plugin/isBetween');
-dayjs.extend(isBetween);
 
 const Transcript = ({ timing, primary, currentTime = -1, setCurrentTime }) => {
-  console.log(currentTime);
   const readTime = time => parseFloat(time.slice(0, -1));
   const startTime = timing[0].startTime;
   const endTime = timing[timing.length - 1].endTime;
@@ -54,6 +51,7 @@ const Share = styled.div`
   padding: 0;
   transition: all 0.5s;
   cursor: pointer;
+  width: fit-content;
 `;
 const TranscriptText = styled.div`
   font-size: 13px;
