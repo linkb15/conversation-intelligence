@@ -51,7 +51,6 @@ function App({ hover, transcript, conversation, setCurrentTime, play, updatePlay
   };
   const [search, setSearch] = useState('');
   const handleInputChange = e => {
-    console.log(search);
     setSearch(e.target.value);
   };
   const [result, setResult] = useState(transcript.word_timings);
