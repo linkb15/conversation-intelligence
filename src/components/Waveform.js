@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import React, { useRef, useEffect, useState } from 'react';
 
 import dayjs from 'dayjs';
+import { Fragment } from 'react';
 const Waveform = ({ timing, currentTime, duration = 1, seek }) => {
   const [width, setWidth] = useState(0);
   const [left, setLeft] = useState(0);
@@ -61,7 +62,7 @@ const Waveform = ({ timing, currentTime, duration = 1, seek }) => {
               const conversationWidth = (endTime - startTime) / duration;
               const startX = startTime / duration;
               return (
-                <>
+                <Fragment key={i}>
                   <WaveTitle x='0' y={i === 0 ? 15 : 45} first={i === 0}>
                     {Math.round(conversationWidth * 100)}% {i === 0 ? ' YOU' : ' PROSPECT'}
                   </WaveTitle>
@@ -70,7 +71,7 @@ const Waveform = ({ timing, currentTime, duration = 1, seek }) => {
                       <ElapsedLine x1='0' y1='27' x2='100%' y2='27' />
                     </>
                   )}
-                </>
+                </Fragment>
               );
             })}
           </svg>
@@ -93,17 +94,19 @@ const Waveform = ({ timing, currentTime, duration = 1, seek }) => {
               const conversationWidth = (endTime - startTime) / duration;
               const startX = startTime / duration;
               return (
-                <>
-                  <svg width={`${conversationWidth * width}`} x={`${startX * width}`} y={i === 1 ? 30 : 0} height={25} key={i}>
+                <Fragment key={i}>
+                  <svg width={`${conversationWidth * width}`} x={`${startX * width}`} y={i === 1 ? 30 : 0} height={25}>
                     {conversationWave(conversationWidth, startX, i === 0)}
                   </svg>
                   {i === 0 && (
                     <>
                       <ElapsedLine x1='0' y1='27' x2='100%' y2='27' />
                       <DurationLine x1='0' y1='27' x2={`${elapsedTime * width}`} y2='27' />
+                      <DurationLine x1={`${elapsedTime * width}`} y1='0' x2={`${elapsedTime * width}`} y2='100%' />
+                      <DurationRect width={`${elapsedTime * width}`} height='55' y='0' />
                     </>
                   )}
-                </>
+                </Fragment>
               );
             })}
           </svg>
@@ -129,6 +132,7 @@ const Wrapper = styled.div`
 const Wave = styled.div`
   width: 100%;
   height: 55px;
+  cursor: pointer;
 `;
 const WaveTitleWrapper = styled.div`
   height: 55px;
@@ -170,4 +174,9 @@ const Rect = styled.rect`
   :hover {
     fill-opacity: 0.6;
   }
+`;
+
+const DurationRect = styled.rect`
+  fill: #1a99f6;
+  fill-opacity: 0.2;
 `;

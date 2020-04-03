@@ -31,27 +31,46 @@ function App({ hover, transcript, conversation, setCurrentTime, play, updatePlay
   const fnPlayPause = () => {
     play(audio);
   };
+  const fnChangeSpeed = value => {
+    updatePlaybackRate(audio, value);
+  };
 
   const seekTime = time => {
     seek(audio, time);
   };
 
+  const rewindForward = time => {
+    let updateTime = currentTime + time;
+    if (updateTime > duration) updateTime = duration;
+    if (updateTime < 0) updateTime = 0;
+    seek(audio, updateTime);
+  };
+
   const onEnded = () => {
     stop();
   };
-
+  const [search, setSearch] = useState('');
+  const handleInputChange = e => {
+    console.log(search);
+    setSearch(e.target.value);
+  };
+  const [result, setResult] = useState(transcript.word_timings);
+  useEffect(() => {
+    const newResult = transcript.word_timings.filter(e => e.some(v => v.word.toLowerCase().includes(search.toLocaleLowerCase())));
+    setResult(newResult);
+  }, [search, transcript.word_timings]);
   return (
     <div>
       <audio ref={audio} onPlay={updateTime} onPause={updateTime} onEnded={onEnded}>
         <source src={conversation} type='audio/wav' />
         Your browser does not support the audio element.
       </audio>
-      <ControlPanel fnPlayPause={fnPlayPause} paused={paused} />
+      <ControlPanel fnPlayPause={fnPlayPause} paused={paused} fnChangeSpeed={fnChangeSpeed} fnSeek={rewindForward} />
       <Waveform timing={transcript.word_timings} currentTime={currentTime} duration={duration} seek={seekTime} />
       <SearchWrapper>
-        <Search placeholder='Search call transcript' />
+        <Search placeholder='Search call transcript' value={search} onChange={handleInputChange} />
       </SearchWrapper>
-      {transcript.word_timings.map((e, i) => (
+      {result.map((e, i) => (
         <Transcript primary={i % 2 === 0} key={i} timing={e} hover={hover} currentTime={currentTime} setCurrentTime={seekTime}></Transcript>
       ))}
     </div>
