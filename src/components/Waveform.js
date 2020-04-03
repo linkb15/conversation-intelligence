@@ -103,12 +103,12 @@ const Waveform = ({ timing, currentTime, duration = 1, seek }) => {
                       <ElapsedLine x1='0' y1='27' x2='100%' y2='27' />
                       <DurationLine x1='0' y1='27' x2={`${elapsedTime * width}`} y2='27' />
                       <DurationLine x1={`${elapsedTime * width}`} y1='0' x2={`${elapsedTime * width}`} y2='100%' />
-                      <DurationRect width={`${elapsedTime * width}`} height='55' y='0' />
                     </>
                   )}
                 </Fragment>
               );
             })}
+            <DurationRect width={`${elapsedTime * width}`} height='55' y='0' />
           </svg>
         </Wave>
       </Wrapper>
